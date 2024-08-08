@@ -17,8 +17,10 @@ pub fn establish_connection() ->Result<Pool<ConnectionManager<PgConnection>>,any
 pub fn spawn_server()->Result<Server,anyhow::Error>{
     // get pg connection
     let db_pool = establish_connection()?;
-    let server = HttpServer::new(|| {
+    let pool = actix_web::web::Data::new(db_pool) ;
+    let server = HttpServer::new(move || {
         App::new()
+        .app_data(pool.clone())
     })
     .bind("127.0.0.1:8080")?
     .run() ;
