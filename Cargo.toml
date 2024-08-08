@@ -1,0 +1,14 @@
+[package]
+name = "Tender_backend-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.8.0"
+anyhow = "1.0.86"
+diesel = { version = "2.2.2" , features = ["uuid","r2d2","chrono","postgres"] }
+dotenv = "0.15.0"
+serde = "1.0.204"
+tokio = { version = "1.39.2" , features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
