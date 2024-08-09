@@ -3,6 +3,7 @@ use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
 
+// This is a test
 #[tokio::main]
 async fn main() {
     let subscriber = FmtSubscriber::builder()
