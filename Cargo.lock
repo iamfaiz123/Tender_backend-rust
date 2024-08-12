@@ -13,6 +13,7 @@ dependencies = [
  "dotenv",
  "r2d2",
  "serde",
+ "sha2",
  "thiserror",
  "tokio",
  "tracing",

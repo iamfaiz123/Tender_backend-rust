@@ -7,6 +7,7 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 
 pub enum ServerError {
+    // The from macro automatically converts specified errors into out ServerError
     #[error("database error")]
     DieselDatabaseError(#[from] diesel::ConnectionError),
     #[error("failed to execute Query")]

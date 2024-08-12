@@ -18,3 +18,4 @@ uuid = { version = "1.10.0" , features = ["v4","serde"] }
 diesel-derive-enum = { version = "2.1.0", features = ["postgres"] }
 utoipa = { version =  "4.2.3" , features = ["actix_extras","uuid","decimal"] }
 utoipa-swagger-ui = {version = "6.0.0" , features = ["actix-web"] } 
+sha2 = "0.10.6"
