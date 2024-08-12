@@ -21,6 +21,7 @@ pub fn spawn_server()->Result<Server,anyhow::Error>{
     let pool = actix_web::web::Data::new(db_pool) ;
     let server = HttpServer::new(move || {
         App::new()
+        .configure(super::open_api::openapi_config)
         .service(
             web::scope("/api").configure(v1_config)
         )

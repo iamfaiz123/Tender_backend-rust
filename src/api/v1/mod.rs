@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse};
-mod users;
+pub mod users;
 use crate::api::v1::users::routes::*;
 
 pub fn v1_config(cfg: &mut web::ServiceConfig) {
