@@ -1,0 +1,103 @@
+use crate::schema::{user_roles, users};
+use diesel::{
+    prelude::*,
+    r2d2::{ConnectionManager, PooledConnection},
+};
+use uuid::Uuid;
+type DbConn = diesel::PgConnection;
+use crate::utils::error;
+
+#[derive(Queryable, Insertable, Debug)]
+#[table_name = "users"]
+pub struct User {
+    pub id: Uuid,
+    pub email: String,
+    pub password: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub bio: Option<String>,
+    pub dp_url: Option<String>,
+}
+
+#[derive(Queryable, Insertable, Debug)]
+#[table_name = "user_roles"]
+pub struct UserRoleXref {
+    pub user_id: uuid::Uuid,
+    pub role: Role,
+}
+impl UserRoleXref {
+    pub fn insert_user_roles(
+        value: &Vec<Self>,
+        conn: &mut DbConn,
+    ) -> Result<(), error::ServerError> {
+        use crate::schema::user_roles;
+        let _ = diesel::insert_into(user_roles::table)
+            .values(value)
+            .execute(conn)?;
+        Ok(())
+    }
+}
+
+impl User {
+    pub fn new(email: String, password: String, first_name: String, last_name: String) -> Self {
+        // change email into smaller case
+
+        // hash password using sha256 and strore here
+        let email = email.to_lowercase();
+        Self {
+            password,
+            first_name,
+            last_name,
+            id: uuid::Uuid::new_v4(),
+            email: email,
+            bio: None,
+            dp_url: None,
+        }
+    }
+
+    pub fn insert(&self, conn: &mut DbConn) -> Result<uuid::Uuid, error::ServerError> {
+        // store user id
+        let user_id = self.id;
+        let _ = diesel::insert_into(users::table)
+            .values(self)
+            .execute(conn)?;
+        Ok(user_id)
+    }
+}
+
+// impl password hashing function
+
+#[derive(Debug, serde::Deserialize, diesel_derive_enum::DbEnum)]
+#[ExistingTypePath = "crate::schema::sql_types::Roles"]
+pub enum Role {
+    Client,
+    Consultant,
+    Builder,
+}
+
+impl Role {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Role::Client => "client",
+            Role::Consultant => "consultant",
+            Role::Builder => "builder",
+        }
+    }
+}
+
+impl From<Role> for String {
+    fn from(role: Role) -> String {
+        role.as_str().to_string()
+    }
+}
+
+impl From<String> for Role {
+    fn from(role: String) -> Role {
+        match role.as_str() {
+            "client" => Role::Client,
+            "consultant" => Role::Consultant,
+            "builder" => Role::Builder,
+            _ => panic!("Unknown role: {}", role),
+        }
+    }
+}

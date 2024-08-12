@@ -6,7 +6,6 @@ use diesel::r2d2::ConnectionManager;
 use diesel::r2d2::Pool;
 
 pub fn establish_connection() ->Result<Pool<ConnectionManager<PgConnection>>,anyhow::Error> {
-
     dotenv().ok();
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let manager:ConnectionManager<_>= ConnectionManager::<diesel::pg::PgConnection>::new(database_url) ;

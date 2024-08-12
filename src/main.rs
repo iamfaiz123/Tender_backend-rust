@@ -1,6 +1,10 @@
 mod server;
+mod utils ;
+mod api ;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
+mod schema;
+mod open_api;
 
 
 #[tokio::main]

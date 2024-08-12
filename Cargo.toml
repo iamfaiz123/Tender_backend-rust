@@ -8,7 +8,13 @@ actix-web = "4.8.0"
 anyhow = "1.0.86"
 diesel = { version = "2.2.2" , features = ["uuid","r2d2","chrono","postgres"] }
 dotenv = "0.15.0"
-serde = "1.0.204"
+r2d2 = "0.8.10"
+serde = { version = "1.0.204" , features = ["serde_derive"] }
+thiserror = "1.0.63"
 tokio = { version = "1.39.2" , features = ["full"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
+uuid = { version = "1.10.0" , features = ["v4","serde"] } 
+diesel-derive-enum = { version = "2.1.0", features = ["postgres"] }
+utoipa = { version =  "4.2.3" , features = ["actix_extras","uuid","decimal"] }
+utoipa-swagger-ui = {version = "6.0.0" , features = ["actix-web"] } 
