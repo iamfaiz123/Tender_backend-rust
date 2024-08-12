@@ -10,7 +10,28 @@ use diesel::{
     PgConnection,
 };
 
+
+#[utoipa::path(
+    post,
+    path="api/v1/signup",
+    request_body = SignupForm ,
+    responses(
+        ( 
+            
+            status = 201 ,
+            description = "user profile is created" ,
+            example = json!({"user_id":"9def5c3f-94db-48f3-b3aa-23b675fef720" , "role" : ["CLIENT" , "BUILDER"]})
+
+        ),
+        (
+            status = 500 ,
+            description = "internal server error"
+  
+        )
+    )
+)]
 #[post("/signup")]
+/// api to crate a user signup request 
 pub async fn signup(
     conn: web::Data<Pool<ConnectionManager<PgConnection>>>,
     req: web::Json<SignupForm>,

@@ -1,9 +1,11 @@
 use std::env;
+use actix_web::web;
 use dotenv::dotenv;
 use actix_web::{dev::Server, App, HttpServer,};
 use diesel::{pg::PgConnection, Connection as _};
 use diesel::r2d2::ConnectionManager;
 use diesel::r2d2::Pool;
+
 
 pub fn establish_connection() ->Result<Pool<ConnectionManager<PgConnection>>,anyhow::Error> {
     // Initilizing env file
@@ -25,7 +27,10 @@ pub fn spawn_server()->Result<Server,anyhow::Error>{
     // The purpose of 'move' is to move our app state into server.
     let server = HttpServer::new(move || {
         App::new()
-        //The purpose of .clone() is to make differeent copies of state so that each thread can have it's own state.
+        .configure(super::open_api::openapi_config)
+        .service(
+            web::scope("/api").configure(crate::api::v1::v1_config)
+        )
         .app_data(pool.clone())
     })
     .bind("127.0.0.1:8080")?
