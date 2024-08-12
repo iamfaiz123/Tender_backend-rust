@@ -1,4 +1,4 @@
-use crate::schema::{user_roles, users};
+use crate::schema::{user_roles, users::{self, password}};
 use diesel::{
     prelude::*,
     r2d2::{ConnectionManager, PooledConnection},
@@ -6,6 +6,7 @@ use diesel::{
 use uuid::Uuid;
 type DbConn = diesel::PgConnection;
 use crate::utils::error;
+use sha2::{Sha256, Digest};
 
 #[derive(Queryable, Insertable, Debug)]
 #[table_name = "users"]
@@ -39,13 +40,14 @@ impl UserRoleXref {
 }
 
 impl User {
-    pub fn new(email: String, password: String, first_name: String, last_name: String) -> Self {
+    pub fn new(email: String, pass: String, first_name: String, last_name: String) -> Self {
         // change email into smaller case
 
         // hash password using sha256 and strore here
         let email = email.to_lowercase();
+        let pass = hash_password(&pass);
         Self {
-            password,
+            password: pass,
             first_name,
             last_name,
             id: uuid::Uuid::new_v4(),
@@ -66,6 +68,12 @@ impl User {
 }
 
 // impl password hashing function
+fn hash_password(pass: &str) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(pass.as_bytes());
+    let result = hasher.finalize();
+    format!("{:x}", result)
+}
 
 #[derive(Debug, serde::Deserialize, diesel_derive_enum::DbEnum)]
 #[ExistingTypePath = "crate::schema::sql_types::Roles"]
