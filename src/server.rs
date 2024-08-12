@@ -1,9 +1,11 @@
 use std::env;
+use actix_web::web;
 use dotenv::dotenv;
 use actix_web::{dev::Server, App, HttpServer,};
 use diesel::{pg::PgConnection, Connection as _};
 use diesel::r2d2::ConnectionManager;
 use diesel::r2d2::Pool;
+use crate::api::v1::v1_config;
 
 pub fn establish_connection() ->Result<Pool<ConnectionManager<PgConnection>>,anyhow::Error> {
     dotenv().ok();
@@ -19,6 +21,9 @@ pub fn spawn_server()->Result<Server,anyhow::Error>{
     let pool = actix_web::web::Data::new(db_pool) ;
     let server = HttpServer::new(move || {
         App::new()
+        .service(
+            web::scope("/api").configure(v1_config)
+        )
         .app_data(pool.clone())
     })
     .bind("127.0.0.1:8080")?
