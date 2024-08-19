@@ -6,4 +6,4 @@ file = "src/schema.rs"
 custom_type_derives = ["diesel::query_builder::QueryId", "Clone"]
 
 [migrations_directory]
-dir = "C:\\Users\\heyit\\Desktop\\Tender_backend-rust\\migrations"
+dir = "C:/Users/abdo5/Desktop/Tender_backend-rust/migrations"
