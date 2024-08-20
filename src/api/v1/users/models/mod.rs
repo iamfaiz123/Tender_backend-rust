@@ -1,8 +1,7 @@
-use crate::schema::{user_roles, users::{self, password}};
-use diesel::{
-    prelude::*,
-    r2d2::{ConnectionManager, PooledConnection},
-};
+use std::fmt;
+
+use crate::schema::{user_roles, users::{self}};
+use diesel::prelude::*;
 use uuid::Uuid;
 type DbConn = diesel::PgConnection;
 use crate::utils::error;
@@ -89,6 +88,16 @@ impl Role {
             Role::Client => "client",
             Role::Consultant => "consultant",
             Role::Builder => "builder",
+        }
+    }
+}
+
+impl fmt::Display for Role {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Role::Client => write!(f, "Client"),
+            Role::Consultant => write!(f, "Consultant"),
+            Role::Builder => write!(f, "Builder"),
         }
     }
 }
