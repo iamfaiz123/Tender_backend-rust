@@ -120,7 +120,7 @@ pub async fn signin(
         let mut conn = conn.get()?;
         
         // Start a database transaction
-        let resp: UserSigninResponse = conn.build_transaction().run(|mut conn| {
+        let resp: UserSigninResponse = conn.build_transaction().run(|conn| {
             // Extract the email and password from the request body
             let SigninForm { email, password } = req.into_inner();
             
@@ -146,7 +146,7 @@ pub async fn signin(
                     
                     // Create a UserSigninResponse with the user ID and roles
                     let resp = UserSigninResponse {
-                        user_id: user.id,
+                        user_id: user.id.to_string(),
                         role: user_roles_vec,
                     };
                     
@@ -154,11 +154,13 @@ pub async fn signin(
                     Result::<UserSigninResponse, ServerError>::Ok(resp)
                 } else {
                     // Return an error if the password does not match
-                    Result::<UserSigninResponse, ServerError>::Err(ServerError::Unauthorized)
+                    // Result::<UserSigninResponse, ServerError>::Err(ServerError::Unauthorized)
+                    todo!()
                 }
             } else {
                 // Return an error if no user was found
-                Result::<UserSigninResponse, ServerError>::Err(ServerError::Unauthorized)
+                // Result::<UserSigninResponse, ServerError>::Err(ServerError::Unauthorized)
+                todo!()
             }
         })?;
         

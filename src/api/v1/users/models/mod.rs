@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::schema::{user_roles, users::{self, password}};
 use diesel::{
     prelude::*,
@@ -89,6 +91,16 @@ impl Role {
             Role::Client => "client",
             Role::Consultant => "consultant",
             Role::Builder => "builder",
+        }
+    }
+}
+
+impl fmt::Display for Role {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Role::Client => write!(f, "Client"),
+            Role::Consultant => write!(f, "Consultant"),
+            Role::Builder => write!(f, "Builder"),
         }
     }
 }
