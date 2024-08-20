@@ -5,6 +5,8 @@ use actix_web::{dev::Server, App, HttpServer,};
 use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use diesel::r2d2::Pool;
+use actix_cors::Cors;
+use actix_web::http::header;
 
 
 pub fn establish_connection() ->Result<Pool<ConnectionManager<PgConnection>>,anyhow::Error> {
@@ -27,6 +29,13 @@ pub fn spawn_server()->Result<Server,anyhow::Error>{
     // The purpose of 'move' is to move our app state into server.
     let server = HttpServer::new(move || {
         App::new()
+        .wrap(
+            Cors::default()
+                .allowed_origin("*")
+                .allowed_methods(vec!["GET", "POST"])
+                .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                .allowed_header(header::CONTENT_TYPE),
+        )
         .configure(super::open_api::openapi_config)
         .service(
             web::scope("/api").configure(crate::api::v1::v1_config)
