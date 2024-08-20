@@ -1,10 +1,7 @@
 use std::fmt;
 
-use crate::schema::{user_roles, users::{self, password}};
-use diesel::{
-    prelude::*,
-    r2d2::{ConnectionManager, PooledConnection},
-};
+use crate::schema::{user_roles, users::{self}};
+use diesel::prelude::*;
 use uuid::Uuid;
 type DbConn = diesel::PgConnection;
 use crate::utils::error;
