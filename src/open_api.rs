@@ -6,8 +6,10 @@ use crate::api::v1::users::routes::*;
 #[derive(utoipa::OpenApi)]
 #[openapi(
     info(title="Tender-website Serivce API DOCS" , version = "1.0" , description = " default "),
-    paths(signup) ,
-    components(schemas(SignupForm)),
+    paths(
+        signup,signin
+    ),
+    components(schemas(SignupForm,SigninForm)),
     tags((name = "static content" , description = "Tender website service apis"))
 )]
 

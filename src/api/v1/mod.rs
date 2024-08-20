@@ -6,6 +6,7 @@ pub fn v1_config(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/v1")
         .service(signup)
+        .service(signin)
 
          
     );
