@@ -1,7 +1,5 @@
 #[allow(unused)]
 use actix_web::{HttpResponse, ResponseError};
-use diesel::result::Error as DieselError;
-use diesel::ConnectionError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
